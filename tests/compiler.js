@@ -313,6 +313,40 @@
       finish(done);
     });
 
+    it('should leave a false inline conditional undefined without an else', function(done) {
+      equal('{{ ("value" if false) is undefined }}', 'true');
+      equal('{{ ("value" if false) | default("fallback") }}', 'fallback');
+      equal('{% set value = "value" if false %}{{ value is defined }}', 'false');
+      finish(done);
+    });
+
+    it('should pass an omitted inline else to functions as undefined', function(done) {
+      equal('{{ check("value" if false) }}', {
+        check: function(value) {
+          expect(value).to.be(undefined);
+          return 'checked';
+        }
+      }, 'checked');
+      finish(done);
+    });
+
+    it('should preserve selected inline values and explicit empty else branches', function(done) {
+      equal('{{ ("value" if true) | default("fallback") }}', 'value');
+      equal('{{ ("" if true) | default("fallback") }}', '');
+      equal('{{ ("value" if false else "") | default("fallback") }}', '');
+      equal('before{{ "value" if false }}after', 'beforeafter');
+      finish(done);
+    });
+
+    it('should apply throwOnUndefined to an omitted inline else', function() {
+      var opts = { throwOnUndefined: true };
+      expect(function() {
+        render('{{ "value" if false }}', {}, opts);
+      }).to.throwException(/attempted to output null or undefined value/);
+      equal('{{ ("value" if false) | default("fallback") }}', {}, opts, 'fallback');
+      equal('{{ "value" if false else "" }}', {}, opts, '');
+    });
+
     function runLoopTests(block) {
       var end = {
         asyncAll: 'endall',
