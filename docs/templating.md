@@ -819,6 +819,11 @@ Unlike javascript's ternary operator, the `else` is optional:
 {{ "true" if foo }}
 ```
 
+When `foo` is falsy and `else` is omitted, the expression evaluates to
+`undefined`. This lets filters such as `default` supply a fallback value.
+It renders as an empty string by default; with `throwOnUndefined` enabled,
+rendering it directly raises an error, as with other undefined values.
+
 ### Function Calls
 
 If you have passed a javascript method to your template, you can call it like
