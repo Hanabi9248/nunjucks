@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+* Return `undefined` for a false inline `if` expression without an `else`,
+  so `default` and `is defined` distinguish it from an explicit empty string.
+  Rendering this value directly now respects `throwOnUndefined`.
+
 3.2.4 (Apr 13 2023)
 ------------------
 
