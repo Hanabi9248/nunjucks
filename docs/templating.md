@@ -1912,6 +1912,9 @@ Accepts both dictionaries and regular strings as well as pairwise iterables.
 
 Convert URLs in plain text into clickable links:
 
+Generated link destinations and labels are HTML-escaped. Other text, including
+existing HTML markup, is left unchanged; `urlize` is not an HTML sanitizer.
+
 **Input**
 
 ```jinja
