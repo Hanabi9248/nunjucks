@@ -1057,6 +1057,19 @@
       finish(done);
     });
 
+    it('urlize escapes generated link attributes and text', function(done) {
+      ['https://example.com/', 'www.example.com/', 'example.com/'].forEach(function(prefix) {
+        var url = prefix + '"data-note="x&y=<b>z</b>';
+        var escaped = prefix + '&quot;data-note=&quot;x&amp;y=&lt;b&gt;z&lt;/b&gt;';
+        var href = prefix.indexOf('https://') === 0 ? escaped : 'http://' + escaped;
+        equal('{{ value | urlize | safe }}', { value: url },
+          '<a href="' + href + '">' + escaped + '</a>');
+      });
+      equal('{{ value | urlize | safe }}', { value: "a'b&c@example.com" },
+        '<a href="mailto:a&#39;b&amp;c@example.com">a&#39;b&amp;c@example.com</a>');
+      finish(done);
+    });
+
     it('wordcount', function(done) {
       equal('{{ "foo bar baz" | wordcount }}', '3');
       equal(
