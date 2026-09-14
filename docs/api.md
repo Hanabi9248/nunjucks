@@ -180,6 +180,10 @@ single loader or an array of loaders. If you pass an array of loaders,
 nunjucks will walk through them in order until one of them finds a
 template. See [`Loader`](#loader) for more info about loaders.
 
+The constructor makes a shallow copy of **opts** before applying defaults.
+Changing its top-level properties later does not affect the environment.
+Nested objects remain shared.
+
 The available flags in **opts** is **autoescape**,
 **throwOnUndefined**, **trimBlocks**, and **lstripBlocks**.
 Read more about those options in [`configure`](#configure) (the
