@@ -23,6 +23,26 @@
   }
 
   describe('api', function() {
+    it('should leave caller options unchanged', function() {
+      var opts = { autoescape: null, trimBlocks: true };
+      var env = new Environment([], opts);
+      expect(opts).to.eql({ autoescape: null, trimBlocks: true });
+      expect(env.opts.autoescape).to.be(true);
+      expect(env.opts.trimBlocks).to.be(true);
+    });
+
+    it('should keep environment options independent', function() {
+      var opts = { autoescape: true };
+      var first = new Environment([], opts);
+      var second;
+      opts.autoescape = false;
+      second = new Environment([], opts);
+      expect(first.renderString('{{ value }}', { value: '<b>' })).to.be('&lt;b&gt;');
+      expect(second.renderString('{{ value }}', { value: '<b>' })).to.be('<b>');
+      second.opts.autoescape = true;
+      expect(opts.autoescape).to.be(false);
+    });
+
     it('should always force compilation of parent template', function() {
       var env = new Environment(new Loader(templatesPath));
 
